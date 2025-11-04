@@ -1,10 +1,32 @@
-variable "ssh_private_key_path" {
-  description = "VM 접속을 위한 SSH Private Key 파일 경로입니다."
-  type        = string
-  default     = "~/.ssh/prod_id_rsa" # Prod 환경 전용 키를 가정합니다.
+variable "target" {
+  description = "K3s 설치 대상 서버"
+  type = object({
+    host = string
+  })
 }
 
-variable "discord_bot_image_tag" {
-  description = "프로덕션에 배포할 디스코드 봇 Docker 이미지의 안정 버전 태그입니다."
-  type        = string
+variable "ssh" {
+  description = "SSH 접속 설정 (관리자 계정)"
+  type = object({
+    user        = string
+    private_key = string
+  })
+  default = {
+    user        = "admin"
+    private_key = "~/.ssh/id_rsa"
+  }
+}
+
+variable "k3s_user" {
+  description = "K3s 운영 전용 계정"
+  type = object({
+    name = string
+    uid  = number
+    gid  = number
+  })
+  default = {
+    name = "k3s"
+    uid  = 2000
+    gid  = 2000
+  }
 }
